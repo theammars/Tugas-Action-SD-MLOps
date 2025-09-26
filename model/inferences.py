@@ -1,5 +1,4 @@
 import joblib, pandas as pd
-from model.infer import load_model, predict_dict
 
 def load_model(path="model/artifacts/latest/stroke_pipeline.joblib"):
     return joblib.load(path)
