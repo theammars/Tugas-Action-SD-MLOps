@@ -1,4 +1,4 @@
-from model.infer import load_model, predict_dict
+from model.inferences import load_model, predict_dict
 
 def test_predict_runs():
     m = load_model()
