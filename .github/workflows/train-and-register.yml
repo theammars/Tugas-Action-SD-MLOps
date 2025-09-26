@@ -27,8 +27,8 @@ jobs:
 
       - name: Check dataset exists
         run: |
-          if [ ! -f data/stroke.csv ]; then
-            echo "ERROR: data/stroke.csv not found. Upload dataset to data/."
+          if [ ! -f data/healthcare-dataset-stroke-data.csv ]; then
+            echo "ERROR: data/healthcare-dataset-stroke-data.csv not found. Upload dataset to data/."
             exit 1
           fi
 
