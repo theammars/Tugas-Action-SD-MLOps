@@ -2,15 +2,12 @@ name: Build and Push API
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   workflow_dispatch: {}
 
 permissions:
   contents: read
-  packages: write
-
-env:
-  IMAGE_NAME: ghcr.io/${{ github.repository }}/stroke-api
+  packages: write   # perlu agar GITHUB_TOKEN bisa push ke ghcr.io
 
 jobs:
   build-and-push:
@@ -18,15 +15,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Buat ENV IMAGE_NAME yg sudah di-lowercase
+      - name: Set IMAGE_NAME (lowercase)
+        run: |
+          echo "IMAGE_NAME=ghcr.io/${GITHUB_REPOSITORY,,}/stroke-api" >> $GITHUB_ENV
+          echo "Using image: $IMAGE_NAME"
+
       - uses: docker/setup-buildx-action@v3
 
-      - uses: docker/login-action@v3
+      - name: Login to GHCR
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: docker/build-push-action@v6
+      - name: Build & Push
+        uses: docker/build-push-action@v6
         with:
           context: .
           push: true
