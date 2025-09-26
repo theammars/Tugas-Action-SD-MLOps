@@ -71,7 +71,6 @@ def train(data_path="data/healthcare-dataset-stroke-data.csv", out_dir="model/ar
         X, y, test_size=0.2, stratify=y, random_state=42
     )
 
-    # pilih: pakai SMOTE atau class_weight
     use_smote = True
     pipe = build_pipeline(use_smote=use_smote)
     pipe.fit(X_tr, y_tr)

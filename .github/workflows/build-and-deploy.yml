@@ -7,7 +7,7 @@ on:
 
 permissions:
   contents: read
-  packages: write   # perlu agar GITHUB_TOKEN bisa push ke ghcr.io
+  packages: write   
 
 jobs:
   build-and-push:
@@ -15,7 +15,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Buat ENV IMAGE_NAME yg sudah di-lowercase
       - name: Set IMAGE_NAME (lowercase)
         run: |
           echo "IMAGE_NAME=ghcr.io/${GITHUB_REPOSITORY,,}/stroke-api" >> $GITHUB_ENV
