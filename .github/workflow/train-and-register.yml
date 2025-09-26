@@ -1,0 +1,51 @@
+name: Train and Register Model
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - "model/**"
+      - "app/**"
+      - "requirements.txt"
+      - ".github/workflows/train-and-register.yml"
+  workflow_dispatch: {}
+
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Check dataset exists
+        run: |
+          if [ ! -f data/stroke.csv ]; then
+            echo "ERROR: data/stroke.csv not found. Upload dataset to data/."
+            exit 1
+          fi
+
+      - name: Train model
+        run: python model/train.py
+
+      - name: Test quick
+        run: |
+          pip install pytest
+          pytest -q
+
+      - name: Pack artifacts
+        run: |
+          tar -czf model_artifacts.tgz -C model artifacts
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: model_artifacts
+          path: model_artifacts.tgz
